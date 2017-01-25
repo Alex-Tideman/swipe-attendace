@@ -228,7 +228,11 @@ function getStudents(id) {
   $.getJSON(url)
   .then((students) => {
     let container = $('.all-students')
+    let absent = $('.absent-students')
+    let present = $('.present-students')
     container.empty()
+    absent.empty()
+    present.empty()
     students.map((student) => {
       container.append(`<div class='card'>${student}</div>`)
     })
