@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const turing = require('./public/students')
 
 app.set('port', process.env.PORT || 3000);
-app.locals.title = 'Attendance';
+app.locals.title = 'Turing Attendance';
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (request, response) => {
