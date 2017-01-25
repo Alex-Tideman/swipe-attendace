@@ -109,13 +109,8 @@ class Cards {
         (Math.abs(this.screenX) / this.targetBCR.width);
     const opacity = 1 - Math.pow(normalizedDragDistance, 3);
 
-    if(this.moved) {
-      this.target.style.transform = ''
-      this.target.style.opacity = 1
-    } else {
-      this.target.style.transform = `translateX(${this.screenX}px)`
-      this.target.style.opacity = opacity
-    }
+    this.target.style.transform = `translateX(${this.screenX}px)`
+    this.target.style.opacity = opacity
 
     // User has finished dragging.
     if (this.draggingCard)
@@ -137,16 +132,12 @@ class Cards {
         const present = document.querySelector('.present-students')
         present.appendChild(this.target)
         this.target.style.opacity = 1
-        this.target.style.willChange = 'initial';
-        this.target.style.transform = 'none';
-        this.draggingCard = false;
+        this.resetTarget()
       } else if(this.targetX < 0) {
         const absent = document.querySelector('.absent-students')
         absent.appendChild(this.target)
         this.target.style.opacity = 1;
-        this.target.style.willChange = 'initial';
-        this.target.style.transform = 'none';
-        this.draggingCard = false;
+        this.resetTarget()
       }
 
       const targetIndex = this.cards.indexOf(this.target)
@@ -222,6 +213,27 @@ class Cards {
     const count = document.querySelector('#class-count')
     count.appendChild(`<h3> 13 / 15</h3>`)
   }
+}
+
+$('.get-cohort').on('click', (e) => {
+  e.preventDefault
+  let id = e.target.id.split("-")
+  getStudents(id)
+})
+
+function getStudents(id) {
+  let program = id[0]
+  let cohort = id[1]
+  let url = `/${program}/${cohort}`
+  $.getJSON(url)
+  .then((students) => {
+    let container = $('.all-students')
+    container.empty()
+    students.map((student) => {
+      container.append(`<div class='card'>${student}</div>`)
+    })
+  })
+  .catch((err) => console.error(err));
 }
 
 window.addEventListener('load', () => new Cards());
